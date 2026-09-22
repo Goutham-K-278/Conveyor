@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 540" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #1A1A1D; }
+      .text-title { fill: #ffffff; font-family: 'Inter', -apple-system, sans-serif; font-size: 15px; font-weight: 600; text-anchor: middle; }
+      .text-sub { fill: #9ca3af; font-family: 'Inter', -apple-system, sans-serif; font-size: 12px; text-anchor: middle; }
+      .label { fill: #d1d5db; font-family: 'JetBrains Mono', monospace; font-size: 12px; text-anchor: middle; font-weight: 500; }
+      .box { fill: #25262B; stroke-width: 2; }
+      .box-client { stroke: #3b82f6; }
+      .box-api { stroke: #8b5cf6; }
+      .box-redis { stroke: #f59e0b; }
+      .box-db { stroke: #10b981; }
+      .box-worker { stroke: #ec4899; }
+      .line { stroke: #6b7280; stroke-width: 2; fill: none; }
+      .dashed { stroke-dasharray: 6,4; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,1 L0,9 L9,5 z" fill="#6b7280" />
+    </marker>
+  </defs>
+
+  <!-- Charcoal Black Background -->
+  <rect class="bg" width="100%" height="100%" />
+
+  <!-- Connecting Lines and Arrows -->
+  
+  <!-- Client to API -->
+  <path class="line" marker-end="url(#arrow)" d="M 160 270 L 230 270" />
+  <text class="label" x="195" y="260">HTTP</text>
+  
+  <!-- API to Redis -->
+  <path class="line" marker-end="url(#arrow)" d="M 300 240 L 300 130 L 430 130" />
+  <text class="label" x="365" y="120">LPUSH (Enqueue)</text>
+  
+  <!-- API to DB -->
+  <path class="line" marker-end="url(#arrow)" d="M 300 300 L 300 410 L 430 410" />
+  <text class="label" x="365" y="400">INSERT (PENDING)</text>
+  
+  <!-- Redis to Worker -->
+  <path class="line" marker-end="url(#arrow)" d="M 560 130 L 630 130" />
+  <text class="label" x="595" y="120">BRPOP (Blocking)</text>
+  
+  <!-- Worker to DB -->
+  <path class="line" marker-end="url(#arrow)" d="M 730 180 L 730 410 L 570 410" />
+  <text class="label" x="650" y="400">UPDATE (COMPLETED)</text>
+
+  <!-- Reaper DB to Redis -->
+  <path class="line dashed" marker-end="url(#arrow)" d="M 480 380 L 480 170" />
+  <text class="label" x="470" y="275" transform="rotate(-90, 470, 275)">Stuck Job Reaper</text>
+
+  <!-- Architecture Nodes -->
+  
+  <!-- Client -->
+  <rect class="box box-client" x="40" y="240" width="120" height="60" rx="6" />
+  <text class="text-title" x="100" y="265">Dashboard</text>
+  <text class="text-sub" x="100" y="283">Vanilla JS UI</text>
+  
+  <!-- API Server -->
+  <rect class="box box-api" x="240" y="240" width="120" height="60" rx="6" />
+  <text class="text-title" x="300" y="265">API Server</text>
+  <text class="text-sub" x="300" y="283">Spring Boot 3</text>
+
+  <!-- Redis -->
+  <rect class="box box-redis" x="440" y="100" width="120" height="60" rx="6" />
+  <text class="text-title" x="500" y="125">Redis</text>
+  <text class="text-sub" x="500" y="143">Queue &amp; Cache</text>
+
+  <!-- DB -->
+  <rect class="box box-db" x="440" y="380" width="120" height="60" rx="6" />
+  <text class="text-title" x="500" y="405">PostgreSQL</text>
+  <text class="text-sub" x="500" y="423">Jobs &amp; Users</text>
+
+  <!-- Worker -->
+  <rect class="box box-worker" x="640" y="80" width="180" height="100" rx="6" />
+  <text class="text-title" x="730" y="105">Worker Service</text>
+  <text class="text-sub" x="730" y="125">1. Thumbnail Generation</text>
+  <text class="text-sub" x="730" y="145">2. Image Compression</text>
+  <text class="text-sub" x="730" y="165">3. EXIF Extraction</text>
+</svg>
