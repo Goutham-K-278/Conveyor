@@ -1,0 +1,171 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Conveyor — Docker Compose
+# ─────────────────────────────────────────────────────────────────────────────
+# Starts the complete Conveyor stack with a single command:
+#   docker compose up
+#
+# Services started:
+#   postgres   — PostgreSQL database (port 5432)
+#   redis      — Redis for job queue + caching (port 6379)
+#   api        — Conveyor API server (port 8080)
+#   worker-1   — Job processing worker (no port — background process)
+#   worker-2   — Job processing worker (no port — background process)
+#   worker-3   — Job processing worker (no port — background process)
+#
+# Workers share the same uploaded files via a named volume (uploads-data).
+# In production, this would be replaced by S3 or a shared NFS mount.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── PostgreSQL — Source of truth for all job data ──────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: conveyor-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-conveyor}
+      POSTGRES_USER: ${POSTGRES_USER:-conveyor_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conveyor_pass}
+    ports:
+      - "5433:5432"
+    volumes:
+      # Persist database data across container restarts
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-conveyor_user} -d ${POSTGRES_DB:-conveyor}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis — Job queue + status cache ─────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: conveyor-redis
+    # AOF (Append Only File) persistence — queue survives Redis restarts
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── API Server — Handles HTTP requests from clients ───────────────────────
+  api:
+    build: .
+    container_name: conveyor-api
+    environment:
+      SPRING_PROFILES_ACTIVE: api
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-conveyor}
+      POSTGRES_USER: ${POSTGRES_USER:-conveyor_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conveyor_pass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-conveyor-super-secret-jwt-key-that-is-long-enough-for-hs256}
+    ports:
+      - "8080:8080"
+    volumes:
+      # Share uploaded files with workers — all services read/write to this volume
+      - uploads-data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Worker 1 ──────────────────────────────────────────────────────────────
+  # Three separate worker processes — each gets a unique worker-id.
+  # They compete for jobs from the Redis queue — each job is processed by
+  # exactly one worker (enforced by the atomic claiming mechanism).
+  worker-1:
+    build: .
+    container_name: conveyor-worker-1
+    environment:
+      SPRING_PROFILES_ACTIVE: worker
+      WORKER_ID: worker-1
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-conveyor}
+      POSTGRES_USER: ${POSTGRES_USER:-conveyor_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conveyor_pass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - uploads-data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started  # Wait for API to run Flyway migrations first
+
+  # ── Worker 2 ──────────────────────────────────────────────────────────────
+  worker-2:
+    build: .
+    container_name: conveyor-worker-2
+    environment:
+      SPRING_PROFILES_ACTIVE: worker
+      WORKER_ID: worker-2
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-conveyor}
+      POSTGRES_USER: ${POSTGRES_USER:-conveyor_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conveyor_pass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - uploads-data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started
+
+  # ── Worker 3 ──────────────────────────────────────────────────────────────
+  worker-3:
+    build: .
+    container_name: conveyor-worker-3
+    environment:
+      SPRING_PROFILES_ACTIVE: worker
+      WORKER_ID: worker-3
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-conveyor}
+      POSTGRES_USER: ${POSTGRES_USER:-conveyor_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conveyor_pass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - uploads-data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started
+
+# ── Named Volumes ─────────────────────────────────────────────────────────────
+volumes:
+  # PostgreSQL data — survives container restarts
+  postgres-data:
+
+  # Redis AOF data — queue and cache survive restarts
+  redis-data:
+
+  # Shared file storage — API uploads here, workers read from here
+  # All 4 application containers (api + 3 workers) mount this same volume
+  uploads-data:

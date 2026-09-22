@@ -1,0 +1,29 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Worker Profile Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+# This profile is activated with: --spring.profiles.active=worker
+# It overrides the main application.yml to run the worker without a web server.
+# ─────────────────────────────────────────────────────────────────────────────
+
+spring:
+  application:
+    name: conveyor-worker
+
+  # ── No Web Server ────────────────────────────────────────────────────────
+  # Workers are background Java processes — they don't need to listen on any port.
+  # Disabling the web server saves memory and removes the need to assign unique ports.
+  main:
+    web-application-type: none
+
+  # ── Skip Flyway on Workers ───────────────────────────────────────────────
+  # The API server runs migrations on startup. Workers should NOT also run them —
+  # that would cause race conditions when multiple workers start simultaneously.
+  flyway:
+    enabled: false
+
+# ── Worker-Specific Logging ───────────────────────────────────────────────────
+# Show more detail from the worker loop so we can trace job lifecycle in logs
+logging:
+  level:
+    com.conveyor.worker: DEBUG
+    com.conveyor.processing: DEBUG

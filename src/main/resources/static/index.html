@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conveyor | Asynchronous Processing</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container">
+            <svg class="conveyor-logo" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width: 120px; height: 40px;">
+                <!-- Belt -->
+                <path d="M 20 8 L 100 8 A 12 12 0 0 1 100 32 L 20 32 A 12 12 0 0 1 20 8 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                <!-- Wheels -->
+                <circle cx="20" cy="20" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="100" cy="20" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="20" cy="20" r="2" fill="currentColor" />
+                <circle cx="100" cy="20" r="2" fill="currentColor" />
+                <!-- Package Box on Belt -->
+                <rect class="box" x="52" y="2" width="16" height="12" rx="2" fill="currentColor" />
+                <!-- Speed lines -->
+                <line x1="45" y1="20" x2="55" y2="20" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2" />
+                <line x1="65" y1="20" x2="75" y2="20" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2" />
+            </svg>
+            <div class="brand">
+                <h1>Conveyor</h1>
+                <span class="subtitle">Distributed Job Processing</span>
+            </div>
+        </div>
+        <button id="logout-btn" class="hidden">Sign Out</button>
+    </header>
+
+    <main id="app">
+        <!-- Auth Section -->
+        <section id="auth-section" class="section card">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in or register to process images on the cluster.</p>
+            </div>
+            <form id="auth-form" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required minlength="8" placeholder="••••••••">
+                </div>
+                <div class="auth-actions">
+                    <button type="submit" id="login-btn" class="btn primary">Login</button>
+                    <button type="button" id="register-btn" class="btn secondary">Create Account</button>
+                </div>
+                <div id="auth-error" class="error-msg hidden"></div>
+            </form>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="section hidden">
+            <!-- Upload Area -->
+            <div class="upload-area card" id="dropzone">
+                <input type="file" id="file-input" accept="image/jpeg, image/png" multiple="multiple" class="hidden">
+                <div class="upload-content">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <h3>Upload Images</h3>
+                    <p>Click or drag JPG/PNG files to dispatch processing jobs.</p>
+                    <button id="upload-btn" class="btn primary">Select Files</button>
+                </div>
+            </div>
+
+            <!-- Jobs List -->
+            <div class="jobs-container">
+                <div class="jobs-header">
+                    <h2>Recent Jobs</h2>
+                    <div class="queue-status">
+                        <span class="status-dot pulsing"></span>
+                        <span>Workers Listening</span>
+                    </div>
+                </div>
+                
+                <div id="jobs-grid" class="jobs-grid">
+                    <!-- Jobs will be injected here via JS -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Job Card Template (Used by JS) -->
+    <template id="job-template">
+        <div class="job-card">
+            <div class="job-card-header">
+                <div class="job-info">
+                    <span class="job-id">#ID</span>
+                    <span class="job-date">Date</span>
+                </div>
+                <div class="job-actions">
+                    <div class="job-badge">STATUS</div>
+                    <button class="btn-delete" title="Delete Job">×</button>
+                </div>
+            </div>
+            
+            <div class="job-progress-container hidden">
+                <div class="job-progress-bar">
+                    <div class="job-progress-fill"></div>
+                </div>
+                <span class="job-progress-text">Processing...</span>
+            </div>
+
+            <div class="job-result hidden">
+                <img class="job-thumbnail" src="" alt="Thumbnail">
+                <div class="job-metadata">
+                    <div class="meta-item"><span class="meta-label">Type:</span> <span class="meta-val meta-format"></span></div>
+                    <div class="meta-item"><span class="meta-label">Size:</span> <span class="meta-val meta-size"></span></div>
+                    <div class="meta-item"><span class="meta-label">Time:</span> <span class="meta-val meta-time"></span></div>
+                </div>
+            </div>
+            
+            <div class="job-error hidden">
+                <span class="error-text"></span>
+            </div>
+        </div>
+    </template>
+
+    </main>
+    <script src="/js/app.js"></script>
+</body>
+</html>

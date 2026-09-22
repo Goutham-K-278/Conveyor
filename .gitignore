@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Conveyor — Git Ignore
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Maven Build Output ───────────────────────────────────────────────────────
+target/
+*.jar
+*.war
+*.class
+
+# ── Maven Wrapper (optional — remove if you include mvnw) ───────────────────
+.mvn/wrapper/maven-wrapper.jar
+
+# ── IDE Files ────────────────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# ── Secrets — NEVER commit these ─────────────────────────────────────────────
+.env
+
+# ── Uploaded Files — runtime directory, not source code ─────────────────────
+uploads/
+
+# ── OS Junk ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── User Requested Exclusions ────────────────────────────────────────────────
+docs/
+code-doc.md
