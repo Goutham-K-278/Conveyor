@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 540" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 540" width="100%" height="100%">
   <defs>
     <style>
       .bg { fill: #1A1A1D; }
@@ -25,55 +25,55 @@
   <!-- Connecting Lines and Arrows -->
   
   <!-- Client to API -->
-  <path class="line" marker-end="url(#arrow)" d="M 160 270 L 230 270" />
-  <text class="label" x="195" y="260">HTTP</text>
+  <path class="line" marker-end="url(#arrow)" d="M 170 270 L 280 270" />
+  <text class="label" x="225" y="260">HTTP</text>
   
   <!-- API to Redis -->
-  <path class="line" marker-end="url(#arrow)" d="M 300 240 L 300 130 L 430 130" />
-  <text class="label" x="365" y="120">LPUSH (Enqueue)</text>
+  <path class="line" marker-end="url(#arrow)" d="M 350 240 L 350 130 L 550 130" />
+  <text class="label" x="450" y="120">LPUSH (Enqueue)</text>
   
   <!-- API to DB -->
-  <path class="line" marker-end="url(#arrow)" d="M 300 300 L 300 410 L 430 410" />
-  <text class="label" x="365" y="400">INSERT (PENDING)</text>
+  <path class="line" marker-end="url(#arrow)" d="M 350 300 L 350 410 L 550 410" />
+  <text class="label" x="450" y="400">INSERT (PENDING)</text>
   
   <!-- Redis to Worker -->
-  <path class="line" marker-end="url(#arrow)" d="M 560 130 L 630 130" />
-  <text class="label" x="595" y="120">BRPOP (Blocking)</text>
+  <path class="line" marker-end="url(#arrow)" d="M 680 130 L 820 130" />
+  <text class="label" x="750" y="120">BRPOP (Blocking)</text>
   
   <!-- Worker to DB -->
-  <path class="line" marker-end="url(#arrow)" d="M 730 180 L 730 410 L 570 410" />
-  <text class="label" x="650" y="400">UPDATE (COMPLETED)</text>
+  <path class="line" marker-end="url(#arrow)" d="M 920 180 L 920 410 L 690 410" />
+  <text class="label" x="805" y="400">UPDATE (COMPLETED)</text>
 
   <!-- Reaper DB to Redis -->
-  <path class="line dashed" marker-end="url(#arrow)" d="M 480 380 L 480 170" />
-  <text class="label" x="470" y="275" transform="rotate(-90, 470, 275)">Stuck Job Reaper</text>
+  <path class="line dashed" marker-end="url(#arrow)" d="M 590 380 L 590 170" />
+  <text class="label" x="580" y="275" transform="rotate(-90, 580, 275)">Stuck Job Reaper</text>
 
   <!-- Architecture Nodes -->
   
   <!-- Client -->
-  <rect class="box box-client" x="40" y="240" width="120" height="60" rx="6" />
-  <text class="text-title" x="100" y="265">Dashboard</text>
-  <text class="text-sub" x="100" y="283">Vanilla JS UI</text>
+  <rect class="box box-client" x="50" y="240" width="120" height="60" rx="6" />
+  <text class="text-title" x="110" y="265">Dashboard</text>
+  <text class="text-sub" x="110" y="283">Vanilla JS UI</text>
   
   <!-- API Server -->
-  <rect class="box box-api" x="240" y="240" width="120" height="60" rx="6" />
-  <text class="text-title" x="300" y="265">API Server</text>
-  <text class="text-sub" x="300" y="283">Spring Boot 3</text>
+  <rect class="box box-api" x="290" y="240" width="120" height="60" rx="6" />
+  <text class="text-title" x="350" y="265">API Server</text>
+  <text class="text-sub" x="350" y="283">Spring Boot 3</text>
 
   <!-- Redis -->
-  <rect class="box box-redis" x="440" y="100" width="120" height="60" rx="6" />
-  <text class="text-title" x="500" y="125">Redis</text>
-  <text class="text-sub" x="500" y="143">Queue &amp; Cache</text>
+  <rect class="box box-redis" x="560" y="100" width="120" height="60" rx="6" />
+  <text class="text-title" x="620" y="125">Redis</text>
+  <text class="text-sub" x="620" y="143">Queue &amp; Cache</text>
 
   <!-- DB -->
-  <rect class="box box-db" x="440" y="380" width="120" height="60" rx="6" />
-  <text class="text-title" x="500" y="405">PostgreSQL</text>
-  <text class="text-sub" x="500" y="423">Jobs &amp; Users</text>
+  <rect class="box box-db" x="560" y="380" width="120" height="60" rx="6" />
+  <text class="text-title" x="620" y="405">PostgreSQL</text>
+  <text class="text-sub" x="620" y="423">Jobs &amp; Users</text>
 
   <!-- Worker -->
-  <rect class="box box-worker" x="640" y="80" width="180" height="100" rx="6" />
-  <text class="text-title" x="730" y="105">Worker Service</text>
-  <text class="text-sub" x="730" y="125">1. Thumbnail Generation</text>
-  <text class="text-sub" x="730" y="145">2. Image Compression</text>
-  <text class="text-sub" x="730" y="165">3. EXIF Extraction</text>
+  <rect class="box box-worker" x="830" y="80" width="180" height="100" rx="6" />
+  <text class="text-title" x="920" y="105">Worker Service</text>
+  <text class="text-sub" x="920" y="125">1. Thumbnail Generation</text>
+  <text class="text-sub" x="920" y="145">2. Image Compression</text>
+  <text class="text-sub" x="920" y="165">3. EXIF Extraction</text>
 </svg>
