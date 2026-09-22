@@ -4,10 +4,10 @@
   <b>A highly scalable, decoupled asynchronous image processing pipeline.</b>
 </p>
 
-## 🎥 Video Demo
+## Video Demo
 [Watch the Project Demo on Google Drive](https://drive.google.com/file/d/1qsbcF_e8hWJU6jmDhKZaCamDhRnYzWMj/view?usp=sharing)
 
-## 💡 About this Project
+## About this Project
 Conveyor is a distributed job processing system designed to handle heavy, CPU-bound tasks asynchronously without making the user wait. 
 
 **End Goal & Impact:**
@@ -16,13 +16,13 @@ Conveyor is a distributed job processing system designed to handle heavy, CPU-bo
 - **Horizontal Scalability:** The background worker fleet can be scaled infinitely to process massive concurrent upload loads without dragging down the main web server.
 - **Fault Tolerance:** Built-in "Stuck Job Reapers" automatically detect and requeue tasks if a worker crashes mid-process.
 
-## 🏗 Architecture
+## Architecture
 
 <p align="center">
   <img src="./architecture.svg" alt="Conveyor Architecture Diagram" width="800">
 </p>
 
-## 🛠 Tech Stack & Tools
+## Tech Stack & Tools
 
 - **Core & APIs:** Java 21, Spring Boot 3.2
 - **Queue & Caching:** Redis (Lettuce Client, JSON Serialization)
@@ -32,7 +32,7 @@ Conveyor is a distributed job processing system designed to handle heavy, CPU-bo
 - **Frontend Dashboard:** Vanilla JavaScript, HTML5, Vanilla CSS (No Node.js overhead)
 - **Infrastructure:** Docker, Docker Compose
 
-## 🚀 How to Use It
+## How to Use It
 
 Conveyor is containerized and built to run flawlessly right out of the box.
 
