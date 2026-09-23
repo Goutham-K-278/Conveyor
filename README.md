@@ -1,7 +1,4 @@
-# Conveyor
-
-<p align="center">
-  <b>A highly scalable, decoupled asynchronous image processing pipeline.</b>
+# Conveyor - A highly scalable, decoupled asynchronous image processing pipeline.
 
 [Watch the Project Demo](https://drive.google.com/file/d/1qsbcF_e8hWJU6jmDhKZaCamDhRnYzWMj/view?usp=sharing)
 
