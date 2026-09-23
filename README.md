@@ -2,10 +2,8 @@
 
 <p align="center">
   <b>A highly scalable, decoupled asynchronous image processing pipeline.</b>
-</p>
 
-## Video Demo
-[Watch the Project Demo on Google Drive](https://drive.google.com/file/d/1qsbcF_e8hWJU6jmDhKZaCamDhRnYzWMj/view?usp=sharing)
+[Watch the Project Demo](https://drive.google.com/file/d/1qsbcF_e8hWJU6jmDhKZaCamDhRnYzWMj/view?usp=sharing)
 
 ## About this Project
 Conveyor is a distributed job processing system designed to handle heavy, CPU-bound tasks asynchronously without making the user wait. 
