@@ -60,6 +60,16 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+# ── Actuator (Observability) ─────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+  endpoint:
+    health:
+      show-details: always
+
 # ── JWT Authentication ───────────────────────────────────────────────────────
 jwt:
   # Use a strong secret in production (at least 256 bits / 32 chars)
