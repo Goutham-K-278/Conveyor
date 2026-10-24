@@ -29,9 +29,10 @@ spring:
       # validate = Hibernate checks schema matches entities, Flyway owns creation
       ddl-auto: validate
     show-sql: false
+    open-in-view: false  # Disable: prevents unintentional lazy-loading during view rendering
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # dialect is auto-detected from the JDBC driver — no need to specify explicitly
         format_sql: true
 
   # ── Flyway — Database Migrations ────────────────────────────────────────
@@ -96,11 +97,16 @@ worker:
   thumbnail-width-pixels: 200
   thumbnail-height-pixels: 200
 
+# ── Disable Spring Security's auto-generated password (we use JWT) ──────────
+spring.security.user.password: disabled-by-jwt-auth
+
 # ── Logging ──────────────────────────────────────────────────────────────────
 logging:
   level:
     com.conveyor: INFO
     org.springframework.security: WARN
+    # Suppress the 'spring.jpa.open-in-view' deprecation noise
+    org.springframework.boot.autoconfigure.orm.jpa: WARN
 
 # ── Redis Queue Names (shared constants for API and Worker) ──────────────────
 queue:

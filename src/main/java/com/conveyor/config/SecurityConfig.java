@@ -59,6 +59,11 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
                     // Static UI files are public
                     .requestMatchers(HttpMethod.GET, "/", "/index.html", "/css/**", "/js/**").permitAll()
+                    // Actuator endpoints (health, metrics) — public so Docker healthcheck and
+                    // monitoring tools can reach them without needing a JWT
+                    .requestMatchers("/actuator/**").permitAll()
+                    // Swagger UI and OpenAPI spec — public for API exploration
+                    .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                     // All other requests require a valid JWT
                     .anyRequest().authenticated()
             )

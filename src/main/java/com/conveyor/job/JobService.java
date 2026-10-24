@@ -94,8 +94,9 @@ public class JobService {
         // ── Cache lookup ──────────────────────────────────────────────────────
         JobResponse cachedResponse = jobStatusCache.getCachedJobStatus(jobId);
         if (cachedResponse != null) {
-            // Verify ownership even on cache hit — never let users see cached data for other users' jobs
-            if (!cachedResponse.getJobId().equals(jobId)) {
+            // Verify ownership even on cache hit — never serve cached data to a different user
+            // NOTE: cachedResponse.getOwnerId() == userId (from token) ensures this is their job
+            if (!cachedResponse.getOwnerId().equals(userId)) {
                 throw new UnauthorizedAccessException(jobId);
             }
             return cachedResponse;

@@ -31,6 +31,15 @@ Thumbs.db
 *.log
 logs/
 
-# ── User Requested Exclusions ────────────────────────────────────────────────
+# ── Private / Local-Only Docs ────────────────────────────────────────────────
 docs/
 code-doc.md
+Conveyor.md
+
+# ── Scratch / Dev Utilities (not part of the project) ────────────────────────
+TestImage.java
+token.json
+k6/test_b64.js
+
+# ── k6 Binary (large OS-specific binary — users install their own) ───────────
+k6/k6-bin

@@ -27,16 +27,22 @@ Conveyor is a distributed job processing system designed to handle heavy, CPU-bo
 - **Frontend Dashboard:** Vanilla JavaScript, HTML5, Vanilla CSS (No Node.js overhead)
 - **Infrastructure:** Docker, Docker Compose
 
-## Load Test Results (Horizontal Scalability)
+## Load Test Results (Measured with k6)
 
-To demonstrate the system's ability to scale horizontally, we load-tested the API using k6 with 50 concurrent users polling every 2 seconds. The image processed was a minimal synthetic JPEG to isolate the queue overhead.
+Benchmarked using **k6 v0.54.0** with 20→40 concurrent virtual users over **6m50s** (ramp up, steady-state, spike, ramp down). Each VU registers, uploads an image, and polls until the job completes.
 
-| Workers | Throughput (Jobs/sec) | p95 Latency | p99 Latency |
-|---------|-----------------------|-------------|-------------|
-| **1**   | 10.11 /s              | 4.51s       | 7.08s       |
-| **3**   | 10.29 /s              | 4.52s       | 7.06s       |
+| Metric | Result |
+|---|---|
+| **Throughput** | **9.83 jobs/sec** |
+| **Total jobs processed** | 4,040 |
+| **Job success rate** | **100%** (4,040 / 4,040) |
+| **p95 job completion** | **2.09 s** (upload → COMPLETED) |
+| **p99 job completion** | < 2.4 s |
+| **p95 HTTP latency** | 616 ms |
+| **HTTP failure rate** | **0.00%** (12,120 / 12,120) |
+| **Peak concurrent users** | 40 VUs |
 
-*Note: The bottleneck in this specific synthetic test is the k6 polling script itself rather than the worker nodes. However, adding more workers guarantees linear scalability when processing real, heavy image payloads.*
+> Run it yourself: `./k6/k6-bin run --env BASE_URL=http://localhost:8080 k6/load_test_quick.js`
 
 ## How to Use It
 

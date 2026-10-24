@@ -20,6 +20,13 @@ public class JobResponse {
     /** The unique job ID — clients use this for subsequent status checks */
     private final Long jobId;
 
+    /**
+     * The ID of the user who owns this job.
+     * Stored in cache so ownership can be verified on cache hits,
+     * preventing one user from reading another user's cached job status.
+     */
+    private final Long ownerId;
+
     /** Current lifecycle status: PENDING, PROCESSING, COMPLETED, or FAILED */
     private final String status;
 
@@ -60,6 +67,7 @@ public class JobResponse {
     public static JobResponse fromJob(Job job) {
         return JobResponse.builder()
                 .jobId(job.getId())
+                .ownerId(job.getOwner().getId())
                 .status(job.getStatus().name())
                 .type(job.getType().name())
                 .outputPath(job.getOutputPath())
